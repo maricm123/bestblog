@@ -1,0 +1,19 @@
+python manage.py migrate --settings=blogapp.settings.pro
+python manage.py migrate --settings=blogapp.settings.base
+python manage.py makemigrations --settings=blogapp.settings.base
+
+python manage.py check --deploy --settings=blogapp.settings.pro
+
+python manage.py runserver --settings=blogapp.settings.pro
+python manage.py runserver --settings=blogapp.settings.base
+
+
+username: maricm123
+password: maricm123
+
+
+video za dodavnaje vise slika:
+https://www.youtube.com/watch?v=-0nYBqY9i5w
+
+produciti0on
+https://www.youtube.com/watch?v=YnrgBeIRtvo
