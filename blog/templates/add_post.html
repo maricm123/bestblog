@@ -8,12 +8,20 @@
 <div class="form-group">
     <form method="POST">
         {% csrf_token %}
+        {{ form.media }}
         {{ form.as_p }}
         <button class="btn btn-secondary">Post</button>
 </form>
 </div>
+
+<script>
+    var name = "{{ user.id }}";
+    document.getElementById("elder").value = name;
+
+</script>
+
 {% else %}
- You can't add post if you not admin.
+ You can't add post if you not correct user.
 {% endif %}
 
 

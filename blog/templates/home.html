@@ -6,10 +6,18 @@
 <ul>
 
 {% for post in object_list %}
-    <li><a href="{% url 'blog:detail' post.pk %}">{{ post.title }}</a>  - {{ post.author.first_name }} {{ post.author.last_name }} - {{ post.date }}
-        {% if user.is_authenticated %}<a href="{% url 'blog:edit_post' post.pk %}">Edit</a> <a href="{% url 'blog:delete_post' post.pk %}">Delete</a><br/>{% endif %}
+    <li><a href="{% url 'blog:detail' post.pk %}">{{ post.title }}</a>
+        <strong><a href="{% url 'blog:category' post.category|slugify %}">({{ post.category }})</a> </strong>
+        - {{ post.author.first_name }} {{ post.author.last_name }} - {{ post.date }}
+        {% if user.is_authenticated %}
+            {% if user.id == post.author.id %}
+        <a href="{% url 'blog:edit_post' post.pk %}">Edit</a>
+        <a href="{% url 'blog:delete_post' post.pk %}">Delete</a><br/>
+            {% endif %}
+        {% endif %}
 <br/>
-        {{ post.body|slice:":200"|safe }}</li>
+        {{ post.snippet }}
+        </li>
 {% endfor %}
 
 </ul>

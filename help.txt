@@ -7,6 +7,8 @@ python manage.py check --deploy --settings=blogapp.settings.pro
 python manage.py runserver --settings=blogapp.settings.pro
 python manage.py runserver --settings=blogapp.settings.base
 
+python manage.py runserver
+
 
 username: maricm123
 password: maricm123
