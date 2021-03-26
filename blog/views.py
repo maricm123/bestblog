@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Category
-from .form import PostForm, EditForm
+from .models import Post, Category, Comment
+from .form import PostForm, EditForm, CommentForm
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
 # def home(request):
@@ -40,6 +41,7 @@ class HomeView(ListView):
 class DetailView(DetailView):
     model = Post
     template_name = 'detail.html'
+    ordering = ['-date']
     def get_context_data(self, *args, **kwargs):
         cat_menu = Category.objects.all()
         context = super(DetailView, self).get_context_data(*args, **kwargs)
@@ -49,6 +51,8 @@ class DetailView(DetailView):
         context["cat_menu"] = cat_menu
         context["total_likes"] = total_likes
         return context
+
+
 
 
 
@@ -65,6 +69,23 @@ class AddPostView(CreateView):
         return context
 
 
+
+class AddCommentView(CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'add_comment.html'
+    # fields = '__all__'
+    def get_success_url(self):
+        # if you are passing 'pk' from 'urls' to 'DeleteView' for company
+        # capture that 'pk' as companyid and pass it to 'reverse_lazy()' function
+        postid = self.kwargs['pk']
+        return reverse_lazy('blog:detail', kwargs={'pk': postid})
+
+    def form_valid(self, form):
+        form.instance.post_id = self.kwargs['pk']
+        return super().form_valid(form)
+
+
 class UpdatePostView(UpdateView):
     model = Post
     form_class = EditForm
@@ -75,6 +96,11 @@ class UpdatePostView(UpdateView):
         context = super(UpdatePostView, self).get_context_data(*args, **kwargs)
         context["cat_menu"] = cat_menu
         return context
+    def get_success_url(self):
+        # if you are passing 'pk' from 'urls' to 'DeleteView' for company
+        # capture that 'pk' as companyid and pass it to 'reverse_lazy()' function
+        postid = self.kwargs['pk']
+        return reverse_lazy('blog:detail', kwargs={'pk': postid})
 
 
 class DeletePostView(DeleteView):
